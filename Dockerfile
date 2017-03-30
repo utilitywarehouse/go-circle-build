@@ -3,7 +3,7 @@ ARG SERVICE
 RUN apk add --no-cache ca-certificates && mkdir /app
 WORKDIR /app
 
-COPY $SERVICE app
+COPY $SERVICE $SERVICE
 
-ENTRYPOINT "/app/app"
+ENTRYPOINT "/app/$SERVICE"
 
