@@ -5,6 +5,8 @@ GIT_HASH := $(CIRCLE_SHA1)
 GIT_HASH ?= $(shell git rev-parse HEAD)
 LINKFLAGS :=-s -X main.gitHash=$(GIT_HASH) -extldflags "-static"
 TESTFLAGS := -v -cover
+LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt
+LINTER := gometalinter.v1
 
 EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
@@ -27,15 +29,15 @@ install_packages: bootstrap_github_credential
 
 .PHONY: install_tools
 install_tools:
-	go get -u gopkg.in/alecthomas/gometalinter.v1
-	gometalinter.v1 --install
+	go get -u gopkg.in/alecthomas/$(LINTER)
+	$(LINTER) --install
 
 .PHONY: lint
 lint:
 ifdef LEXC
-	gometalinter.v1 --exclude '$(LEXC)' ./...
+	$(LINTER) --exclude '$(LEXC)' '$(LINT_FLAGS)' ./...
 else
-	gometalinter.v1 ./...
+	$(LINTER) $(LINT_FLAGS) ./...
 endif
 
 .PHONY: clean
