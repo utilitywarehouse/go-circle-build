@@ -1,9 +1,9 @@
 FROM alpine:3.5
 ARG SERVICE
+ENV APP=${SERVICE}
 RUN apk add --no-cache ca-certificates && mkdir /app
-WORKDIR /app
 
-COPY $SERVICE $SERVICE
+COPY $SERVICE /app/${SERVICE}
 
-ENTRYPOINT "/app/$SERVICE"
+ENTRYPOINT /app/${APP}
 
