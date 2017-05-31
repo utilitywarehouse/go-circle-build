@@ -6,7 +6,8 @@ GIT_HASH ?= $(shell git rev-parse HEAD)
 LINKFLAGS :=-s -X main.gitHash=$(GIT_HASH) -extldflags "-static"
 TESTFLAGS := -v -cover
 LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt
-LINTER := gometalinter.v1
+LINTER_EXE = gometalinter.v1
+LINTER := $(GOPATH)/bin/$(LINTER_EXE)
 
 EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
@@ -27,13 +28,12 @@ bootstrap_github_credential:
 install_packages: bootstrap_github_credential
 	go get -t -v ./...
 
-.PHONY: install_tools
-install_tools:
-	go get -u gopkg.in/alecthomas/$(LINTER)
+$(LINTER):
+	go get -u gopkg.in/alecthomas/$(LINTER_EXE)
 	$(LINTER) --install
 
 .PHONY: lint
-lint:
+lint: $(LINTER)
 ifdef LEXC
 	$(LINTER) --exclude '$(LEXC)' $(LINT_FLAGS) ./...
 else
@@ -58,4 +58,4 @@ rebuild: clean $(SERVICE);
 default: rebuild ;
 
 .PHONY: build-container
-build-container: bootstrap_github_credential install_packages install_tools lint test rebuild
+build-container: bootstrap_github_credential install_packages $(LINTER) lint test rebuild
