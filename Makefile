@@ -2,7 +2,9 @@ SERVICE ?= $(PWD)
 BUILDENV=
 BUILDENV+=CGO_ENABLED=0 
 GIT_HASH := $(CIRCLE_SHA1)
-GIT_HASH ?= $(shell git rev-parse HEAD)
+ifeq ($(GIT_HASH),)
+  GIT_HASH := $(shell git rev-parse HEAD)
+endif
 LINKFLAGS :=-s -X main.gitHash=$(GIT_HASH) -extldflags "-static"
 TESTFLAGS := -v -cover
 LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt
