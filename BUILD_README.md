@@ -17,7 +17,10 @@ have a setup that auto-deploys to the Kubernetes `dev` cluster.
 ## Usage
 
   1. Drop those three files into your project root. Then edit `circle.yml` and
-     replace `<service-name>` with the name of your app.
+     replace `<service-name>` with the name of your app. (This should almost
+     certainly be the same as the name of your project's GitHub repository,
+     which should be the same as the basename of the directory containing your
+     app's source code.)
 
   2. Add a Circle CI project for your app and define at least the following
      three environment variables for it:
@@ -44,8 +47,8 @@ have a setup that auto-deploys to the Kubernetes `dev` cluster.
     (`$PWD`) into the container, install the minimal set of required apk's in
     the container, and finally invoke `make all` inside the container.
 
-  - A `circle.yml` deployment task will then build a Docker image including
-    that binary and publish it to the `registry.uw.systems` Docker
+  - A `circle.yml` deployment task will then build a Docker image including the
+    resulting binary and publish it to the `registry.uw.systems` Docker
     registry.
 
 ## Notes
