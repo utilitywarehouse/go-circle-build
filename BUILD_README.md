@@ -75,8 +75,8 @@ concatenate this into a pipe delimited string and pass it to the `-e` flag for
 
 You can simply copy/paste the `test.override` task from `circle.yml` onto the
 command-line if you would like to install/test/build your app in a container on
-your local machine. (You may have to set some environment variable to get it to
-work.) E.g.:
+your local machine. (You may have to set some environment variables to get it
+to work.) E.g.:
 
     $ export SERVICE=$(basename $PWD)
     $ docker run --rm -e GH_USERNAME -e GH_PASSWORD -e SERVICE -e LINT_EXCLUDE \
