@@ -39,8 +39,8 @@ have a setup that auto-deploys to the Kubernetes `dev` cluster.
   - The included Makefile contains an `all` target that, when invoked in your
     project's root folder, will install your app's dependencies, lint your
     code, run your tests, and if all goes well, `go build` a new binary for
-    your app. As usual with Go apps, the binary artifact will be named after
-    the directory containing your source code.
+    your app. As usual with Go apps, by default the binary artifact will be
+    named after the directory containing your source code.
 
   - The included `circle.yml` file contains a custom `test` task that will
     launch a [go-alpine][1] container, sync the project's base directory
