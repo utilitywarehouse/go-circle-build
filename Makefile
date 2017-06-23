@@ -1,6 +1,11 @@
-SERVICE ?= $(PWD)
-BUILDENV=
-BUILDENV+=CGO_ENABLED=0 
+# get name of directory containing this Makefile
+# (stolen from https://stackoverflow.com/a/18137056)
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+base_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+
+SERVICE ?= $(base_dir)
+BUILDENV :=
+BUILDENV += CGO_ENABLED=0
 GIT_HASH := $(CIRCLE_SHA1)
 ifeq ($(GIT_HASH),)
   GIT_HASH := $(shell git rev-parse HEAD)
@@ -8,7 +13,7 @@ endif
 LINKFLAGS :=-s -X main.gitHash=$(GIT_HASH) -extldflags "-static"
 TESTFLAGS := -v -cover
 LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt
-LINTER_EXE = gometalinter.v1
+LINTER_EXE := gometalinter.v1
 LINTER := $(GOPATH)/bin/$(LINTER_EXE)
 
 EMPTY :=
@@ -46,6 +51,7 @@ endif
 clean:
 	rm -f $(SERVICE)
 
+# builds our binary
 $(SERVICE):
 	$(BUILDENV) go build -o $(SERVICE) -a -ldflags '$(LINKFLAGS)' .
 
@@ -53,11 +59,12 @@ $(SERVICE):
 test:
 	$(BUILDENV) go test $(TESTFLAGS) ./...
 
+# remove any existing binary and build a new one
 .PHONY: rebuild
 rebuild: clean $(SERVICE);
 
 .PHONY: default
 default: rebuild ;
 
-.PHONY: build-container
-build-container: bootstrap_github_credential install_packages $(LINTER) lint test rebuild
+.PHONY: all
+all: bootstrap_github_credential install_packages $(LINTER) lint test rebuild
