@@ -15,7 +15,7 @@ machine:
 dependencies:
   pre:
     - docker login -e none@none.com -u $UW_DOCKER_USERNAME
-      -p $UW_DOCKER_PASSWORD $UW_DOCKER_REGISTRY
+      -p $UW_DOCKER_PASS $UW_DOCKER_REGISTRY
   override:
     #- docker-compose up -d
     #- sleep 5
