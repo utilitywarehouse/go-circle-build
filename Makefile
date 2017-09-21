@@ -1,9 +1,3 @@
-# get name of directory containing this Makefile
-# (stolen from https://stackoverflow.com/a/18137056)
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-base_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-
-WORKDIR ?= $(base_dir)
 SERVICE ?= $(CIRCLE_PROJECT_REPONAME)
 
 DOCKER_REGISTRY=registry.uw.systems
