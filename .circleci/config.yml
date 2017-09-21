@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/utilitywarehouse/tmp
+    working_directory: /go/src/github.com/utilitywarehouse/${CIRCLE_PROJECT_REPONAME}
     docker:
     - image: circleci/golang:1.9
     steps:
@@ -11,7 +11,7 @@ jobs:
       - run: make lint test
 
   deploy:
-    working_directory: /go/src/github.com/utilitywarehouse/tmp
+    working_directory: /go/src/github.com/utilitywarehouse/${CIRCLE_PROJECT_REPONAME}
     docker:
     - image: circleci/golang:1.9
     steps:
