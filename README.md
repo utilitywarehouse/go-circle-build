@@ -1,4 +1,4 @@
-# My New Service (MNS) ![logo](logo.png)
+# My New Service (MNS)
 
 Give a high level explanation of what your service does.
 
@@ -74,7 +74,7 @@ go build cmd/my-new-service/main.go
 For circle build instructions see the [Circle build README](CIRCLE_README.md)
 
 ## Testing
-Are there any tests that need to be taken before a user is able to run your tests?
+Are there any steps that need to be taken before a user is able to run your tests?
 
 For example dependant containers to spin up via the docker-compose file, or environmental variables that need to be exported.
 
