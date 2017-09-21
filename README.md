@@ -1,5 +1,89 @@
-# my app
+# My New Service (MNS) ![logo](logo.png)
 
-TODO: replace me
+Give a high level explanation of what your service does.
 
-for build instructions see [BUILD_README](BUILD_README.md)
+Explain the business requirement it solves, explaining more about the process that end users might follow with your service.
+
+And a brief overview of how an end user would interact with your service. 
+
+## Setup
+To install, run go get, then follow build instructions from the new directory.
+
+```bash
+go get github.com/utilitywarehouse/my-new-service
+cd  ~/go/src/github.com/utilitywarehouse/my-new-service
+```
+
+### Dependencies 
+* A DB
+* A Kafka topic
+* Another Service
+
+### Usage
+This should cover more technical details of how your service is actually run, this includes CLI options, Endpoints for an API, and Prometheus metrics. 
+
+#### Options
+```
+  --port=8080         The port to listen on for HTTP connections ($HTTP_PORT)
+  --opsPort=8081      The port to listen on for HTTP connections for Ops ($OPS_PORT)
+```
+
+#### Endpoints
+
+Is this an API that has endpoints?  If so list endpoints, broken by their httpMethod. For Post methods describe what the route returns, for routes with variable endings, give an example. For Post/Put methods give a curl example.
+
+*Get Methods*
+* `/api/v1/get`
+Retruns wonderful data
+
+* `/api/v1/get/{something}`
+Returns something
+Eg. `/api/v1/get/thisIsSomething`
+
+
+*Post Methods*
+* `/api/v1/post`
+Post some data to this route
+```bash
+curl -X "POST" "http://localhost:8080/api/v1/post" \
+     -H "Content-Type: application/json" \
+     -d $'{
+  "data": "some data"
+}'
+```
+
+#### Metrics
+
+What are the Prometheus metrics that have been implemented? Explaining which metrics are performance vs error metrics, to help others diagnosis your service.
+
+*Performance*
+
+`TotalJobs`
+Total number of jobs run
+
+*Errors*
+
+`ErrCount`
+The total number of errors
+
+## Building 
+```bash
+go get -u -t ./...
+go build cmd/my-new-service/main.go
+```
+For circle build instructions see the [Circle build README](CIRCLE_README.md)
+
+## Testing
+Are there any tests that need to be taken before a user is able to run your tests?
+
+For example dependant containers to spin up via the docker-compose file, or environmental variables that need to be exported.
+
+Set DB_CONNECTION_STRING to localhost
+
+
+```bash
+export DB_CONNECTION_STRING=localhost
+go test ./...
+```
+
+

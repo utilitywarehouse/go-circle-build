@@ -53,7 +53,7 @@ clean:
 
 # builds our binary
 $(SERVICE):
-	$(BUILDENV) go build -o $(SERVICE) -a -ldflags '$(LINKFLAGS)' .
+	$(BUILDENV) go build -o $(SERVICE) -a -ldflags '$(LINKFLAGS)' ./cmd/$(SERVICE)
 
 .PHONY: test
 test:
