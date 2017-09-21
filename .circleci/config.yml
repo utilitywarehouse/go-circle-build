@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: circleci/golang:1.9
+    steps:
+      - checkout
+      - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+      - run: make install
+      - run: make lint test
+
+  deploy:
+    docker:
+    - image: circleci/golang:1.9
+    steps:
+      - checkout
+      - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+      - run: make install
+      - run: make lint test
+      - setup_remote_docker:
+          version: 17.06.0-ce
+      - run: make ci-docker-build
+
+workflows:
+  version: 2
+  development:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: master
+  deployment:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master

@@ -80,7 +80,7 @@ to work.) E.g.:
 
     $ export SERVICE=$(basename $PWD)
     $ docker run --rm -e GH_USERNAME -e GH_PASSWORD -e SERVICE -e LINT_EXCLUDE \
-      -v $PWD:/go/src/github.com/utilitywarehouse/$SERVICE golang:1.8-alpine \
+      -v $PWD:/go/src/github.com/utilitywarehouse/$SERVICE golang:1.9-alpine \
       sh -c 'apk update && apk add make git gcc musl-dev &&
       cd /go/src/github.com/utilitywarehouse/$SERVICE && make all'
 
