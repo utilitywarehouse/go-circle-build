@@ -3,7 +3,19 @@
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 base_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
-SERVICE ?= $(base_dir)
+WORKDIR ?= $(base_dir)
+SERVICE ?= $(CIRCLE_PROJECT_REPONAME)
+
+DOCKER_REGISTRY=registry.uw.systems
+DOCKER_REPOSITORY_NAMESPACE=telecom
+DOCKER_ID=telco
+DOCKER_REPOSITORY_IMAGE=$(SERVICE)
+DOCKER_REPOSITORY=registry.uw.systems/$(DOCKER_REPOSITORY_NAMESPACE)/$(DOCKER_REPOSITORY_IMAGE)
+
+K8S_NAMESPACE=$(DOCKER_REPOSITORY_NAMESPACE)
+K8S_DEPLOYMENT_NAME=$(DOCKER_REPOSITORY_IMAGE)
+K8S_CONTAINER_NAME=$(K8S_DEPLOYMENT_NAME)
+
 BUILDENV :=
 BUILDENV += CGO_ENABLED=0
 GIT_HASH := $(CIRCLE_SHA1)
@@ -25,15 +37,9 @@ ifdef LINT_EXCLUDE
 	LEXC := $(call join-with,|,$(LINT_EXCLUDE))
 endif
 
-.DEFAULT_GOAL := rebuild
-
-.PHONY: bootstrap_github_credential
-bootstrap_github_credential:
-	@echo "machine github.com login $(GH_USERNAME) password $(GH_PASSWORD)" > ~/.netrc
-
-.PHONY: install_packages
-install_packages: bootstrap_github_credential
-	go get -t -v ./...
+.PHONY: install
+install:
+	go get -v -t -d ./...
 
 $(LINTER):
 	go get -u gopkg.in/alecthomas/$(LINTER_EXE)
@@ -53,18 +59,27 @@ clean:
 
 # builds our binary
 $(SERVICE):
-	$(BUILDENV) go build -o $(SERVICE) -a -ldflags '$(LINKFLAGS)' ./cmd/$(SERVICE)
+	$(BUILDENV) go build -o $(SERVICE) -a -ldflags '$(LINKFLAGS)' ./cmd
+
+build: $(SERVICE)
 
 .PHONY: test
 test:
 	$(BUILDENV) go test $(TESTFLAGS) ./...
 
-# remove any existing binary and build a new one
-.PHONY: rebuild
-rebuild: clean $(SERVICE);
+docker-image:
+	docker build -t $(DOCKER_REPOSITORY):local . --build-arg SERVICE=$(SERVICE) --build-arg GITHUB_TOKEN=$(GITHUB_TOKEN)
 
-.PHONY: default
-default: rebuild ;
+ci-docker-auth:
+	@echo "Logging in to $(DOCKER_REGISTRY) as $(DOCKER_ID)"
+	@docker login -u $(DOCKER_ID) -p $(DOCKER_PASSWORD) $(DOCKER_REGISTRY)
 
-.PHONY: all
-all: bootstrap_github_credential install_packages $(LINTER) lint test rebuild
+ci-docker-build: ci-docker-auth
+	docker build -t $(DOCKER_REPOSITORY):$(CIRCLE_SHA1) . --build-arg SERVICE=$(SERVICE) --build-arg GITHUB_TOKEN=$(GITHUB_TOKEN)
+	docker tag $(DOCKER_REPOSITORY):$(CIRCLE_SHA1) $(DOCKER_REPOSITORY):latest
+	docker push $(DOCKER_REPOSITORY)
+
+K8S_URL=https://elb.master.k8s.dev.uw.systems/apis/extensions/v1beta1/namespaces/$(K8S_NAMESPACE)/deployments/$(K8S_DEPLOYMENT_NAME)
+K8S_PAYLOAD={"spec":{"template":{"spec":{"containers":[{"name":"$(K8S_CONTAINER_NAME)","image":"$(DOCKER_REPOSITORY):$(CIRCLE_SHA1)"}]}}}}
+
+

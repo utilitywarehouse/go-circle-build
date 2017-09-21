@@ -30,6 +30,14 @@ This should cover more technical details of how your service is actually run, th
 
 #### Endpoints
 
+##### Ports
+
+What if any ports are exposed, and used to interact with your app. These should be the external ports that kubernets exposes.
+
+`80/443`
+
+#### Routes
+
 Is this an API that has endpoints?  If so list endpoints, broken by their httpMethod. For Post methods describe what the route returns, for routes with variable endings, give an example. For Post/Put methods give a curl example.
 
 *Get Methods*
