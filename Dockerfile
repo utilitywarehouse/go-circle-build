@@ -25,4 +25,4 @@ ENV APP=${SERVICE}
 RUN apk add --no-cache ca-certificates && mkdir /app
 COPY --from=build /${SERVICE} /app/${SERVICE}
 
-ENTRYPOINT /app/${SERVICE}
+ENTRYPOINT /app/${APP}

@@ -25,8 +25,8 @@ have a setup that auto-deploys to the Kubernetes `dev` cluster.
   2. Add a Circle CI project for your app and define at least the following
      three environment variables for it:
 
-       - `UW_DOCKER_PASSWORD` (password for Docker registry)
-       - `GH_USERNAME` and `GH_PASSWORD` (credentials for GitHub repo)
+       - `DOCKER_PASSWORD` (password for UW Docker registry)
+       - `GITHUB_TOKEN` (token credentials for GitHub repo)
 
      If your app doesn't belong to the _telecom_ domain, you will also
      need to define the `UW_DOCKER_USERNAME` and `NAMESPACE` environment
@@ -78,11 +78,12 @@ command-line if you would like to install/test/build your app in a container on
 your local machine. (You may have to set some environment variables to get it
 to work.) E.g.:
 
-    $ export SERVICE=$(basename $PWD)
-    $ docker run --rm -e GH_USERNAME -e GH_PASSWORD -e SERVICE -e LINT_EXCLUDE \
+    export SERVICE=$(basename $PWD)
+
+    docker run --rm -e GITHUB_TOKEN-e DOCKER_PASSWORD -e SERVICE -e LINT_EXCLUDE \
       -v $PWD:/go/src/github.com/utilitywarehouse/$SERVICE golang:1.9-alpine \
       sh -c 'apk update && apk add make git gcc musl-dev &&
-      cd /go/src/github.com/utilitywarehouse/$SERVICE && make all'
+      cd /go/src/github.com/utilitywarehouse/$SERVICE && make $SERVICE'
 
 This will produce a statically linked executable in your current working
 directory, much the same way as `go build` would, with the difference that this
