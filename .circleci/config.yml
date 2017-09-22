@@ -22,7 +22,10 @@ jobs:
       - setup_remote_docker:
           version: 17.06.0-ce
       - run: make ci-docker-build
-        #      - run: make ci-kubernetes-push
+      #- run: make ci-kubernetes-push
+      # Uncomment this if you want automated k8s deployments
+      # You will also need to set the envVar K8S_DEV_TOKEN which you can find by running
+      # k -n telecom get secrets <service-account-token> -ojson | jq -r .data.token | base64 --decode
 
 workflows:
   version: 2
