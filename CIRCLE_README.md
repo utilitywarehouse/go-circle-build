@@ -1,8 +1,9 @@
 # Minimalist, boilerplate build templates that almost just work V2
 
 The `.circleci/config.yml`, `Makefile`, and `Dockerfile` files in this repo are designed
-to be dropped as-is into a new Go project. If all goes as planned, two simple
-steps will result in a working CI setup that:
+to be dropped as-is into a new Go project. It assumes your package main is in ./cmd of your project.
+If all goes as planned, two simple steps will result in a working CI setup that:
+
 
   - produces a tested Go binary that can be run in an Alpine Linux Docker
     container, and
@@ -10,7 +11,7 @@ steps will result in a working CI setup that:
   - produces and publishes an Alpine Linux-based Docker image that runs that
     binary
 
-If you are feeling ambitious, you can uncomment the task `ci-kubernetes-push` in your `.circleci/config.yml` and then you will also have a setup that auto-deploys to the Kubernetes `dev` cluster. Though you will need to add the `K8S_DEV_TOKEN` to your project.
+If you are feeling ambitious, you can uncomment the task `ci-kubernetes-push` in your `.circleci/config.yml` and then you will also have a setup that auto-deploys to the Kubernetes `dev` cluster. Though you will need to add the `K8S_DEV_TOKEN` to your project. Also if you are building something wihout a package main, you will need to update L59 of the Makefile.
 
 
 
