@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: circleci/golang:1.9
+    - image: mongo:3.4
+    steps:
+      - checkout
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+      - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+      - run: make install
+      - run: make lint test
+
+  deploy:
+    working_directory: /go/src/github.com/utilitywarehouse/bulk-line-test-api
+    docker:
+    - image: circleci/golang:1.9
+    steps:
+      - checkout
+      - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+      - run: make install
+      - setup_remote_docker:
+          version: 17.06.0-ce
+      - run: make ci-docker-build
+      - run: make ci-kubernetes-push
+
+workflows:
+  version: 2
+  development:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: master
+  deployment:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master

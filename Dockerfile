@@ -1,22 +1,28 @@
-# Super minimalist Dockerfile defining an image that, when run, executes
-# a single binary identified by the `SERVICE` build argument
-FROM alpine:3.5
+FROM golang:1.9-alpine AS build
 
-# When building the image, pass name of app (usually just the basename of the
-# directory containing your app) via the `SERVICE` build argument, e.g.
-#
-#     docker build --build-arg SERVICE=my-app-name`
+RUN apk update && apk add make git gcc musl-dev
+
+ARG GITHUB_TOKEN
 ARG SERVICE
 
-# We copy the value of the `SERVICE` build argument to an ENV variable; the ENV
-# value will be persisted in the built image, allowing (1) the binary to be
-# persisted in the image under a descriptive name (IOW, not "app") and (2) users
-# to launch the app by executing simply `docker run <image>`, without (3) also
-# requiring users of this generic Dockerfile to hard-code the name of their app
-# into the file.
+RUN git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+ADD . /go/src/github.com/utilitywarehouse/${SERVICE}
+
+WORKDIR /go/src/github.com/utilitywarehouse/${SERVICE}
+
+RUN make clean install
+RUN make ${SERVICE}
+
+RUN mv ${SERVICE} /${SERVICE}
+
+FROM alpine:3.6
+
+ARG SERVICE
+
 ENV APP=${SERVICE}
 
 RUN apk add --no-cache ca-certificates && mkdir /app
-COPY ${SERVICE} /app/${SERVICE}
-ENTRYPOINT /app/${APP}
+COPY --from=build /${SERVICE} /app/${SERVICE}
 
+ENTRYPOINT /app/${APP}
