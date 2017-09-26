@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    working_directory: /go/src/github.com/utilitywarehouse/go-circle-build
     docker:
     - image: circleci/golang:1.9
     - image: mongo:3.4
@@ -14,7 +15,7 @@ jobs:
       - run: make lint test
 
   deploy:
-    working_directory: /go/src/github.com/utilitywarehouse/bulk-line-test-api
+    working_directory: /go/src/github.com/utilitywarehouse/go-circle-build
     docker:
     - image: circleci/golang:1.9
     steps:
