@@ -56,7 +56,7 @@ clean:
 
 # builds our binary
 $(SERVICE):
-	$(BUILDENV) go build -o $(SERVICE) -a -ldflags '$(LINKFLAGS)' ./cmd/$(SERVICE)
+	$(BUILDENV) go build -o $(SERVICE) -a -ldflags '$(LINKFLAGS)' .
 
 build: $(SERVICE)
 
