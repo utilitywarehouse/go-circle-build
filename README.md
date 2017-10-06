@@ -87,7 +87,7 @@ The total number of errors
 
 ```bash
 go get -u -t ./...
-go build main.go
+go build cmd/my-new-service/main.go
 ```
 
 For circle build instructions see the [Circle build README](CIRCLE_README.md)

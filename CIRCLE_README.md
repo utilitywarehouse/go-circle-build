@@ -1,7 +1,7 @@
 # Minimalist, boilerplate build templates that almost just work V2
 
 The `.circleci/config.yml`, `Makefile`, and `Dockerfile` files in this repo are designed
-to be dropped as-is into a new Go project. It assumes your package main is in root of your project.
+to be dropped as-is into a new Go project. It assumes your package main is in `./cmd` of your project.
 If all goes as planned, two simple steps will result in a working CI setup that:
 
 - produces a tested Go binary that can be run in an Alpine Linux Docker
