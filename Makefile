@@ -64,6 +64,9 @@ build: $(SERVICE)
 test:
 	$(BUILDENV) go test $(TESTFLAGS) ./...
 
+.PHONY: all
+all: clean $(LINTER) lint test build
+
 docker-image:
 	docker build -t $(DOCKER_REPOSITORY):local . --build-arg SERVICE=$(SERVICE) --build-arg GITHUB_TOKEN=$(GITHUB_TOKEN)
 
@@ -74,6 +77,11 @@ ci-docker-auth:
 ci-docker-build: ci-docker-auth
 	docker build -t $(DOCKER_REPOSITORY):$(CIRCLE_SHA1) . --build-arg SERVICE=$(SERVICE) --build-arg GITHUB_TOKEN=$(GITHUB_TOKEN)
 	docker tag $(DOCKER_REPOSITORY):$(CIRCLE_SHA1) $(DOCKER_REPOSITORY):latest
+	docker push $(DOCKER_REPOSITORY)
+
+ci-docker-build-branch: ci-docker-auth
+	docker build -t $(DOCKER_REPOSITORY):$(CIRCLE_SHA1) . --build-arg SERVICE=$(SERVICE) --build-arg GITHUB_TOKEN=$(GITHUB_TOKEN)
+	docker tag $(DOCKER_REPOSITORY):$(CIRCLE_SHA1) $(DOCKER_REPOSITORY):$(CIRCLE_BRANCH)
 	docker push $(DOCKER_REPOSITORY)
 
 K8S_URL=https://elb.master.k8s.dev.uw.systems/apis/extensions/v1beta1/namespaces/$(K8S_NAMESPACE)/deployments/$(K8S_DEPLOYMENT_NAME)
