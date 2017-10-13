@@ -64,6 +64,9 @@ build: $(SERVICE)
 test:
 	$(BUILDENV) go test $(TESTFLAGS) ./...
 
+.PHONY: all
+all: clean $(LINTER) lint test build
+
 docker-image:
 	docker build -t $(DOCKER_REPOSITORY):local . --build-arg SERVICE=$(SERVICE) --build-arg GITHUB_TOKEN=$(GITHUB_TOKEN)
 
