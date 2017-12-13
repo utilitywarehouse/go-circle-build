@@ -7,7 +7,7 @@ DOCKER_REGISTRY?=registry.uw.systems
 DOCKER_REPOSITORY_NAMESPACE?=telecom
 DOCKER_ID?=telco
 DOCKER_REPOSITORY_IMAGE=$(SERVICE)
-DOCKER_REPOSITORY=registry.uw.systems/$(DOCKER_REPOSITORY_NAMESPACE)/$(DOCKER_REPOSITORY_IMAGE)
+DOCKER_REPOSITORY=$(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY_NAMESPACE)/$(DOCKER_REPOSITORY_IMAGE)
 
 K8S_NAMESPACE=$(DOCKER_REPOSITORY_NAMESPACE)
 K8S_DEPLOYMENT_NAME=$(DOCKER_REPOSITORY_IMAGE)
@@ -21,7 +21,7 @@ ifeq ($(GIT_HASH),)
 endif
 LINKFLAGS :=-s -X main.gitHash=$(GIT_HASH) -extldflags "-static"
 TESTFLAGS := -v -cover
-LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt
+LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt --enable=errcheck
 LINTER_EXE := gometalinter.v1
 LINTER := $(GOPATH)/bin/$(LINTER_EXE)
 
