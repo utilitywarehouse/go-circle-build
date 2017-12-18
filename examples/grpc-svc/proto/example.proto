@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package example;
+
+option go_package = "github.com/utilitywarehouse/go-circle-build/examples/grpc-svc/pkg/pb/example";
+
+service Example{
+	rpc GetExample(ExampleRequest) returns (ExampleResponse) {}
+}
+
+message ExampleRequest{
+	string req = 1;
+}
+
+message ExampleResponse {
+	string resp = 1;
+}
+
+
