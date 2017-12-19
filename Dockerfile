@@ -16,7 +16,7 @@ RUN make ${SERVICE}
 
 RUN mv ${SERVICE} /${SERVICE}
 
-FROM alpine:3.6
+FROM alpine:3.7
 
 ARG SERVICE
 
