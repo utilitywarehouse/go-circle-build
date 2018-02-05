@@ -10,7 +10,7 @@ jobs:
       - run: make install
       - run: make lint test
       - setup_remote_docker:
-          version: 17.06.0-ce
+          version: 17.11.0-ce
       - run: make ci-docker-build
 
   deploy:
@@ -23,7 +23,7 @@ jobs:
       - run: make install
       - run: make lint test
       - setup_remote_docker:
-          version: 17.06.0-ce
+          version: 17.11.0-ce
       - run: make ci-docker-build
       #- run: make ci-kubernetes-push
       # Uncomment this if you want automated k8s deployments
