@@ -75,7 +75,7 @@ to work.) E.g.:
     export SERVICE=$(basename $PWD)
 
     docker run --rm -e GITHUB_TOKEN-e DOCKER_PASSWORD -e SERVICE -e LINT_EXCLUDE \
-      -v $PWD:/go/src/github.com/utilitywarehouse/$SERVICE golang:1.9-alpine \
+      -v $PWD:/go/src/github.com/utilitywarehouse/$SERVICE golang:1.10-alpine \
       sh -c 'apk update && apk add make git gcc musl-dev &&
       cd /go/src/github.com/utilitywarehouse/$SERVICE && make $SERVICE'
 
