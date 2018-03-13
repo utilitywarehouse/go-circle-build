@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/utilitywarehouse/go-circle-build
     docker:
-    - image: circleci/golang:1.10
+    - image: circleci/golang:1
     steps:
       - checkout
       - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
@@ -16,7 +16,7 @@ jobs:
   deploy:
     working_directory: /go/src/github.com/utilitywarehouse/go-circle-build
     docker:
-    - image: circleci/golang:1.10
+    - image: circleci/golang:1
     steps:
       - checkout
       - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
