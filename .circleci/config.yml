@@ -1,31 +1,33 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/utilitywarehouse/go-circle-build
+    working_directory: /go/src/github.com/utilitywarehouse/app
     docker:
     - image: circleci/golang:1
     steps:
       - checkout
+      - run: mv /go/src/github.com/utilitywarehouse/app /go/src/github.com/utilitywarehouse/$CIRCLE_PROJECT_REPONAME
       - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-      - run: make install
-      - run: make lint test
+      - run: cd ../$CIRCLE_PROJECT_REPONAME && make install
+      - run: cd ../$CIRCLE_PROJECT_REPONAME && make lint test
       - setup_remote_docker:
           version: 17.11.0-ce
-      - run: make ci-docker-build
+      - run: cd ../$CIRCLE_PROJECT_REPONAME && make ci-docker-build
 
   deploy:
-    working_directory: /go/src/github.com/utilitywarehouse/go-circle-build
+    working_directory: /go/src/github.com/utilitywarehouse/app
     docker:
     - image: circleci/golang:1
     steps:
       - checkout
+      - run: mv /go/src/github.com/utilitywarehouse/app /go/src/github.com/utilitywarehouse/$CIRCLE_PROJECT_REPONAME
       - run: git config --global url."https://$GITHUB_TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-      - run: make install
-      - run: make lint test
+      - run: cd ../$CIRCLE_PROJECT_REPONAME && make install
+      - run: cd ../$CIRCLE_PROJECT_REPONAME && make lint test
       - setup_remote_docker:
           version: 17.11.0-ce
-      - run: make ci-docker-build
-      #- run: make ci-kubernetes-push
+      - run: cd ../$CIRCLE_PROJECT_REPONAME && make ci-docker-build
+      #- run: cd ../$CIRCLE_PROJECT_REPONAME && make ci-kubernetes-push
       # Uncomment this if you want automated k8s deployments
       # You will also need to set the envVar K8S_DEV_TOKEN which you can find by running
       # k -n telecom get secrets <service-account-token> -ojson | jq -r .data.token | base64 --decode
