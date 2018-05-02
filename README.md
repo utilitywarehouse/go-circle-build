@@ -1,3 +1,5 @@
+**Telecom team isn't maintaining this repo, instead we are using [Telecom Microservice Generator](https://github.com/utilitywarehouse/telecom-microservice-generator).**
+
 # My New Service (MNS)
 
 Give a high level explanation of what your service does.
