@@ -21,7 +21,7 @@ ifeq ($(GIT_HASH),)
 endif
 LINKFLAGS :=-s -X main.gitHash=$(GIT_HASH) -extldflags "-static"
 TESTFLAGS := -v -cover
-LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt --enable=errcheck --enable=goimports
+LINT_FLAGS :=--disable-all --enable=vet --enable=vetshadow --enable=golint --enable=ineffassign --enable=goconst --enable=gofmt --enable=goimports
 LINTER_EXE := gometalinter.v2
 LINTER := $(GOPATH)/bin/$(LINTER_EXE)
 
