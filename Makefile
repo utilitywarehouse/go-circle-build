@@ -1,3 +1,5 @@
+SHELL=/bin/bash -o pipefail
+
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 base_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
